@@ -8,6 +8,7 @@ from settings import TG_TOKEN
 bot: Bot = Bot(token=TG_TOKEN)
 dp: Dispatcher = Dispatcher(bot)
 
+# Словарь в котором храниться статистика игры
 game = dict(hidden_number=0,
             count=0,
             game_started=False,
@@ -102,12 +103,13 @@ dp.register_message_handler(process_start_command, commands='start')
 dp.register_message_handler(process_help_command, commands='help')
 dp.register_message_handler(process_stat_command, commands='stat')
 dp.register_message_handler(process_cancel_command,
-                            Text(equals=['Хватит', "Надоело", "Стоп"]))  # ,
-# commands='cancel')
+                            Text(equals=['Хватит', "Надоело", "Стоп"]),
+                            ignore_case=True)
 dp.register_message_handler(process_number_command,
                             Text([str(x) for x in range(100)]))
 dp.register_message_handler(process_yes_command,
-                            Text(equals=["Да", "Давай", "Сыграем", "Yes"]))
+                            Text(equals=["Да", "Давай", "Сыграем", "Yes"]),
+                            ignore_case=True)
 dp.register_message_handler(send_echo)
 
 
