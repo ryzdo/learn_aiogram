@@ -1,15 +1,19 @@
-import os
-import dotenv
+from environs import Env
 from random import randint
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Text
 
 
-dotenv.load_dotenv()
-TG_TOKEN = os.getenv('TG_TOKEN')
+env = Env()              # Создаем экземпляр класса Env
+env.read_env()           # Методом read_env() читаем файл .env и загружаем из него переменные в окружение
+
+tg_token = env('TG_TOKEN')     # Сохраняем значение переменной окружения в переменную bot_token
+admin_id = env.int('ADMIN_ID')   # Преобразуем значение переменной окружения к типу int
+                                 # и сохраняем в переменной admin_id
+
 
 # Создаем объекты бота и диспетчера
-bot: Bot = Bot(token=TG_TOKEN)
+bot: Bot = Bot(token=tg_token)
 dp: Dispatcher = Dispatcher(bot)
 
 # Словарь в котором храниться статистика игры
