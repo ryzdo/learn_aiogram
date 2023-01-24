@@ -1,8 +1,12 @@
+import os
+import dotenv
 from random import randint
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Text
-from settings import TG_TOKEN
 
+
+dotenv.load_dotenv()
+TG_TOKEN = os.getenv('TG_TOKEN')
 
 # Создаем объекты бота и диспетчера
 bot: Bot = Bot(token=TG_TOKEN)
@@ -54,10 +58,14 @@ async def process_stat_command(message: types.Message):
 
 # Этот хэндлер должен срабатывать на "/cancel"
 async def process_cancel_command(message: types.Message):
-    game['game_started'] = False
-    game['stat_game_canceled'] += 1
-    await message.answer('Игра отменена\n'
-                         'для новой игры введите "Да", "Давай" или "Сыграем"')
+    if game['game_started']:
+        game['game_started'] = False
+        game['stat_game_canceled'] += 1
+        ANSWER = ('Игра отменена\n'
+                  'для новой игры введите "Да", "Давай" или "Сыграем"')
+    else:
+        ANSWER = 'Игра не запущена'
+    await message.answer(ANSWER)
 
 
 # Этот хэндлер должен срабатывать на число
@@ -103,13 +111,13 @@ dp.register_message_handler(process_start_command, commands='start')
 dp.register_message_handler(process_help_command, commands='help')
 dp.register_message_handler(process_stat_command, commands='stat')
 dp.register_message_handler(process_cancel_command,
-                            Text(equals=['Хватит', "Надоело", "Стоп"]),
-                            ignore_case=True)
+                            Text(equals=['Хватит', "Надоело", "Стоп"],
+                                 ignore_case=True))
 dp.register_message_handler(process_number_command,
                             Text([str(x) for x in range(100)]))
 dp.register_message_handler(process_yes_command,
-                            Text(equals=["Да", "Давай", "Сыграем", "Yes"]),
-                            ignore_case=True)
+                            Text(equals=["Да", "Давай", "Сыграем", "Yes"],
+                                 ignore_case=True))
 dp.register_message_handler(send_echo)
 
 
