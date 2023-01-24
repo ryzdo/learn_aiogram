@@ -4,13 +4,19 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Text
 
 
-env = Env()              # Создаем экземпляр класса Env
-env.read_env()           # Методом read_env() читаем файл .env и загружаем из него переменные в окружение
+# Создаем экземпляр класса Env
+env = Env()
 
-tg_token = env('TG_TOKEN')     # Сохраняем значение переменной окружения в переменную bot_token
-admin_id = env.int('ADMIN_ID')   # Преобразуем значение переменной окружения к типу int
-                                 # и сохраняем в переменной admin_id
+# Методом read_env() читаем файл .env
+# и загружаем из него переменные в окружение
+env.read_env()
 
+# Сохраняем значение переменной окружения в переменную bot_token
+tg_token = env('TG_TOKEN')
+
+# Преобразуем значение переменной окружения к типу int
+# и сохраняем в переменной admin_id
+admin_id = env.int('ADMIN_ID')
 
 # Создаем объекты бота и диспетчера
 bot: Bot = Bot(token=tg_token)
